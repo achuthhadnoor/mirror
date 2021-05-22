@@ -18,7 +18,6 @@ const createWindow = ()=>{
     webPreferences:{
       nodeIntegration:true,
       contextIsolation:false,
-      devTools:true,
       preload:join(__dirname,'preload.js')
     }
   })
@@ -26,7 +25,7 @@ const createWindow = ()=>{
     console.log(browserWin.getBounds())
   })
   browserWin.loadFile('index.html') ;
-  browserWin.webContents.openDevTools();
+  // browserWin.webContents.openDevTools();
 }
 
 function createTray() {
