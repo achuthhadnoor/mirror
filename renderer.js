@@ -1,6 +1,7 @@
 window.onload = async () => {
     const { ipcRenderer } = require('electron')
-    const video = document.querySelector('video')
+    const video = document.querySelector('video');
+    const vidsrc = document.getElementById('vidsrc');
     const constraints = {
         video: {
             width: {
@@ -11,8 +12,17 @@ window.onload = async () => {
             }
         }
     }
-    var enumeratorPromise = await navigator.mediaDevices.enumerateDevices();
-    console.log(enumeratorPromise);
+    var devices = await navigator.mediaDevices.enumerateDevices();
+    console.log(devices);
+    devices.map((device) => {
+        if (device.kind === 'videoinput') {
+            var op = document.createElement('option');
+            op.value = device.deviceId;
+            op.innerText = device.label;
+            vidsrc.appendChild(op)
+        }
+    })
+
     navigator.mediaDevices.getUserMedia(constraints).then((stream) => {
         video.srcObject = stream  // Play stream in <video> element
     }).catch((error) => {
@@ -35,5 +45,5 @@ window.onload = async () => {
     window.addEventListener('resize', (e) => {
         video.height = window.innerHeight;
         video.width = window.innerWidth;
-    }); 
+    });
 }
