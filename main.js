@@ -1,30 +1,30 @@
 // Modules to control application life and create native browser window
-const { app, BrowserWindow, Tray } = require('electron');
+const { app, BrowserWindow, Tray, Menu } = require('electron');
 const { askForCameraAccess } = require('node-mac-permissions');
 const { join } = require('path')
 const { ipcMain } = require('electron')
 
-let tray,browserWin;
+let tray, browserWin;
 
-const createWindow = ()=>{
+const createWindow = () => {
   browserWin = new BrowserWindow({
-    frame:false,
-    alwaysOnTop:true,
-    width:450,
-    height:300,
-    maxWidth:800,
-    maxHeight:800,
-    transparent:true,
-    webPreferences:{
-      nodeIntegration:true,
-      contextIsolation:false,
-      preload:join(__dirname,'preload.js')
+    frame: false,
+    alwaysOnTop: true,
+    width: 450,
+    height: 300,
+    maxWidth: 800,
+    maxHeight: 800,
+    transparent: true,
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false,
+      preload: join(__dirname, 'preload.js')
     }
   })
-  browserWin.on("resized",(t)=>{
+  browserWin.on("resized", (t) => {
     console.log(browserWin.getBounds())
   })
-  browserWin.loadFile('index.html') ;
+  browserWin.loadFile('index.html');
   // browserWin.webContents.openDevTools();
 }
 
@@ -32,15 +32,15 @@ function createTray() {
   // Create the browser window.
   tray = new Tray(join(__dirname, 'appTemplate.png'));
   tray.on('click', () => {
-  if(browserWin.isVisible()){
-    browserWin.hide();
-    browserWin.webContents.send('asynchronous-message', 'STOP_VIDEO');
-  } 
-  else{
-    browserWin.show();
-    browserWin.webContents.send('asynchronous-message', 'SHOW_VIDEO');
-  }
-  
+    if (browserWin.isVisible()) {
+      browserWin.hide();
+      browserWin.webContents.send('asynchronous-message', 'STOP_VIDEO');
+    }
+    else {
+      browserWin.show();
+      browserWin.webContents.send('asynchronous-message', 'SHOW_VIDEO');
+    }
+
   })
 }
 
@@ -68,4 +68,6 @@ app.on('window-all-closed', function () {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
-
+ipcMain.on('quit',()=>{
+  app.quit();
+})

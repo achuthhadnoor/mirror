@@ -9,13 +9,19 @@ body{
   z-index: 999;
   right: 0px;
   margin: 10px;
-  background: rgba(0,0,0,.4);
-  color: #fff;
+  background: rgba(0,0,0,.1);
+  color: #bbb;
   padding: 5px;
   border-radius: 10px;
   outline: none;
+  backdrop-filter: blur(2px);
+  transition: all .3s ease-in-out;
+}
+#vidsrc:hover{
+  background: rgba(0,0,0,.4);
+  color: #fff;
   backdrop-filter: blur(19px);
-
+  transition: all .3s ease-in-out;
 }
 
 .video-container {
@@ -43,4 +49,18 @@ body{
 
   -webkit-app-region: drag;
   transform: rotateY(180deg);
+}
+.power{
+  position:absolute;
+  top:0;
+  z-index: 99;
+  padding:5px;  
+  margin:10px;
+  color:#bbb;
+  transition: all .3s ease-in-out;
+}
+
+.power:hover{
+  color:#fff;
+  transition: all .3s ease-in-out;
 }

@@ -2,6 +2,7 @@ window.onload = async () => {
     const { ipcRenderer } = require('electron')
     const video = document.querySelector('video');
     const vidsrc = document.getElementById('vidsrc');
+    const quit = document.getElementById('quit');
     let videoDevices = [];
     var devices = await navigator.mediaDevices.enumerateDevices();
 
@@ -30,6 +31,11 @@ window.onload = async () => {
         }
         console.log(ev, message);
     })
+
+    quit.onclick = ()=>{
+        ipcRenderer.send('quit');
+    }
+
     window.addEventListener('resize', (e) => {
         video.height = window.innerHeight;
         video.width = window.innerWidth;
