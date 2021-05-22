@@ -30,12 +30,13 @@
   },
   "config": {
     "forge": {
-      "packagerConfig": {},
+      "packagerConfig": {
+        "icon": "mirror.icns"
+        },
       "makers": [ 
         {
-          "name": "@electron-forge/maker-dmg",
+        "name": "@electron-forge/maker-dmg",
           "config": {
-            "icon": "icon.png",
             "format": "ULFO"
           }
         }
