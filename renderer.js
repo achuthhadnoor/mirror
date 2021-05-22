@@ -1,6 +1,38 @@
-// This file is required by the index.html file and will
-// be executed in the renderer process for that window.
-// No Node.js APIs are available in this process because
-// `nodeIntegration` is turned off. Use `preload.js` to
-// selectively enable features needed in the rendering
-// process.
+(() => {
+    const { ipcRenderer } = require('electron')
+    const video = document.querySelector('video')
+    const constraints = {
+        video: {
+            width: {
+                ideal: 450 // Ideal video width is size of screen
+            },
+            height: {
+                ideal: 300 // Ideal video height is size of screen
+            }
+        }
+    }
+
+    window.addEventListener('resize', (e) => {
+        video.height = window.innerHeight;
+        video.width = window.innerWidth;
+    });
+    navigator.mediaDevices.getUserMedia(constraints).then((stream) => {
+        video.srcObject = stream  // Play stream in <video> element
+    }).catch((error) => {
+        console.error(error)
+    })
+    ipcRenderer.on('asynchronous-message', (ev, message) => {
+        if ('STOP_VIDEO') {
+            console.log('message');
+            video.srcObject = ''
+        }
+        else {
+            navigator.mediaDevices.getUserMedia(constraints).then((stream) => {
+                video.srcObject = stream  // Play stream in <video> element
+            }).catch((error) => {
+                console.error(error)
+            })
+        }
+        console.log(ev, message);
+    })
+})();
