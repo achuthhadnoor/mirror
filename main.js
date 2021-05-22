@@ -12,6 +12,9 @@ const createWindow = ()=>{
     alwaysOnTop:true,
     width:450,
     height:300,
+    maxWidth:800,
+    maxHeight:800,
+    transparent:true,
     webPreferences:{
       nodeIntegration:true,
       contextIsolation:false,
