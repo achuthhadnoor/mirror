@@ -6,19 +6,6 @@ const { ipcMain } = require('electron')
 
 let tray,browserWin;
 
-
-const getPermissions = async () => {
-
-  let status = await askForCameraAccess();
-
-  if(status === 'authorized'){
-    console.log(status);
-  } 
-  else{
-    app.quit();
-  }
-}
-
 const createWindow = ()=>{
   browserWin = new BrowserWindow({
     frame:false,
@@ -60,7 +47,6 @@ function createTray() {
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
   try {
-    getPermissions();
     createWindow();
   }
   catch {
