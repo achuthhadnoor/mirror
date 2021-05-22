@@ -1,6 +1,5 @@
 // Modules to control application life and create native browser window
 const { app, BrowserWindow, Tray, Menu } = require('electron');
-const { askForCameraAccess } = require('node-mac-permissions');
 const { join } = require('path')
 const { ipcMain } = require('electron')
 
@@ -31,16 +30,16 @@ const createWindow = () => {
 function createTray() {
   // Create the browser window.
   tray = new Tray(join(__dirname, 'appTemplate.png'));
+  tray.setToolTip('Mirror | Camera preview')
   tray.on('click', () => {
     if (browserWin.isVisible()) {
       browserWin.hide();
-      browserWin.webContents.send('asynchronous-message', 'STOP_VIDEO');
+      // browserWin.webContents.send('asynchronous-message', 'STOP_VIDEO');
     }
     else {
-      browserWin.show();
-      browserWin.webContents.send('asynchronous-message', 'SHOW_VIDEO');
+      browserWin.show(); 
+      // browserWin.webContents.send('asynchronous-message', 'SHOW_VIDEO');
     }
-
   })
 }
 
