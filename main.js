@@ -2,8 +2,17 @@
 const { app, BrowserWindow, Tray, Menu } = require('electron');
 const { join } = require('path')
 const { ipcMain } = require('electron')
+const Store = require('electron-store');
+const AutoLaunch = require('auto-launch');
 
-let tray, browserWin;
+let tray, browserWin, isAutolaunch = true;
+
+let store = new Store();
+
+var _autoLaunch = new AutoLaunch({
+  name: 'Mirror',
+  path: '/Applications/Mirror.app',
+});
 
 const createWindow = () => {
   browserWin = new BrowserWindow({
@@ -24,6 +33,7 @@ const createWindow = () => {
     console.log(browserWin.getBounds())
   })
   browserWin.loadFile('index.html');
+  browserWin.setAlwaysOnTop(true, 'screen');
   // browserWin.webContents.openDevTools();
 }
 
@@ -37,10 +47,38 @@ function createTray() {
       // browserWin.webContents.send('asynchronous-message', 'STOP_VIDEO');
     }
     else {
-      browserWin.show(); 
+      browserWin.show();
       // browserWin.webContents.send('asynchronous-message', 'SHOW_VIDEO');
     }
   })
+  tray.on('right-click', () => {
+    let template = [
+      {
+        label: 'launch on startup',
+        type: 'checkbox',
+        checked: isAutolaunch,
+        click: () => {
+          isAutolaunch = !isAutolaunch
+          isAutolaunch ? _autoLaunch.enable() : _autoLaunch.disable();
+          store.set("mirrorApp", { autolaunch: isAutolaunch })
+        }
+      },
+      { type: 'separator' },
+      {
+        role: "quit"
+      },
+    ]
+    const menu = Menu.buildFromTemplate(template);
+    tray.popUpContextMenu(menu);
+  })
+}
+
+if (store.get('mirrorApp')) {
+  let _store = store.get('mirrorApp');
+  isAutolaunch = _store.autolaunch;
+}
+else {
+  store.set('mirrorApp', { autolaunch: true })
 }
 
 // This method will be called when Electron has finished
@@ -53,7 +91,13 @@ app.whenReady().then(() => {
   catch {
     app.quit();
   }
-  createTray()
+  createTray();
+  _autoLaunch.isEnabled().then((isEnabled) => {
+    if (isEnabled) {
+      return;
+    }
+    _autoLaunch.enable();
+  });
 })
 if (app.dock) {
   app.dock.hide();
@@ -67,6 +111,6 @@ app.on('window-all-closed', function () {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
-ipcMain.on('quit',()=>{
+ipcMain.on('quit', () => {
   app.quit();
 })
