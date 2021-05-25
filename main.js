@@ -8,8 +8,7 @@ const AutoLaunch = require('auto-launch');
 const gotTheLock = app.requestSingleInstanceLock()
 
 if (!gotTheLock) {
-    app.quit()
-    return;
+    app.quit();
 }
 
 
