@@ -31,11 +31,11 @@ const createWindow = () => {
     }
   })
   browserWin.setVisibleOnAllWorkspaces(true,{visibleOnFullScreen:true})
+  browserWin.setAlwaysOnTop(true,"floating",1);
   browserWin.on("resized", (t) => {
     console.log(browserWin.getBounds())
   })
-  browserWin.loadFile('index.html');
-  browserWin.setAlwaysOnTop(true, 'screen');
+  browserWin.loadFile('index.html'); 
   // browserWin.webContents.openDevTools();
 }
 
