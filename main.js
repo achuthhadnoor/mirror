@@ -45,11 +45,11 @@ function createTray() {
   tray.on('click', () => {
     if (browserWin.isVisible()) {
       browserWin.hide();
-      // browserWin.webContents.send('asynchronous-message', 'STOP_VIDEO');
+      browserWin.webContents.send('asynchronous-message', 'STOP_VIDEO');
     }
     else {
       browserWin.show();
-      // browserWin.webContents.send('asynchronous-message', 'SHOW_VIDEO');
+      browserWin.webContents.send('asynchronous-message', 'SHOW_VIDEO');
     }
   })
   tray.on('right-click', () => {

@@ -17,22 +17,22 @@ window.onload = async () => {
         }
     })
     startVideo(videoDevices[0].deviceID);
-    vidsrc.onchange = ({target})=>{
+    vidsrc.onchange = ({ target }) => {
         startVideo(target.value);
     }
 
     ipcRenderer.on('asynchronous-message', (ev, message) => {
-        if ('STOP_VIDEO') {
-            console.log('message');
-            video.srcObject = ''
+        if (message === 'STOP_VIDEO') {
+            localStream.getVideoTracks()[0].stop();
+            video.src = '';
+            return;
         }
-        else {
-            startVideo(videoDevices[0].deviceID);
-        }
+
+        startVideo(videoDevices[0].deviceID);
         console.log(ev, message);
     })
 
-    quit.onclick = ()=>{
+    quit.onclick = () => {
         ipcRenderer.send('quit');
     }
 
@@ -41,10 +41,9 @@ window.onload = async () => {
         video.width = window.innerWidth;
     });
     function startVideo(deviceID) {
-
         const constraints = {
             video: {
-                deviceID : deviceID,
+                deviceID: deviceID,
                 width: {
                     ideal: 450 // Ideal video width is size of screen
                 },
@@ -54,7 +53,8 @@ window.onload = async () => {
             }
         }
         navigator.mediaDevices.getUserMedia(constraints).then((stream) => {
-            video.srcObject = stream  // Play stream in <video> element
+            video.srcObject = stream;  // Play stream in <video> element
+            window.localStream = stream;
         }).catch((error) => {
             console.error(error)
         })
