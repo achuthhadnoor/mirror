@@ -5,6 +5,14 @@ const { ipcMain } = require('electron')
 const Store = require('electron-store');
 const AutoLaunch = require('auto-launch');
 
+const gotTheLock = app.requestSingleInstanceLock()
+
+if (!gotTheLock) {
+    app.quit()
+    return;
+}
+
+
 let tray, browserWin, isAutolaunch = true;
 
 let store = new Store();
