@@ -26,8 +26,7 @@ const createWindow = () => {
     fullscreenable: false, 
     webPreferences: {
       nodeIntegration: true,
-      contextIsolation: false,
-      preload: join(__dirname, 'preload.js')
+      contextIsolation: false
     }
   })
   browserWin.setVisibleOnAllWorkspaces(true,{visibleOnFullScreen:true})
