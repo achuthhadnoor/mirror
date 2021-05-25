@@ -23,12 +23,14 @@ const createWindow = () => {
     maxWidth: 800,
     maxHeight: 800,
     transparent: true,
+    fullscreenable: false, 
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
       preload: join(__dirname, 'preload.js')
     }
   })
+  browserWin.setVisibleOnAllWorkspaces(true,{visibleOnFullScreen:true})
   browserWin.on("resized", (t) => {
     console.log(browserWin.getBounds())
   })
