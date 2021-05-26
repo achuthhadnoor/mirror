@@ -25,9 +25,9 @@ window.onload = async () => {
         if (message === 'STOP_VIDEO') {
             localStream.getVideoTracks()[0].stop();
             video.src = '';
+            ipcRenderer.send('Hide');
             return;
         }
-
         startVideo(videoDevices[0].deviceID);
         console.log(ev, message);
     })
@@ -52,6 +52,7 @@ window.onload = async () => {
                 }
             }
         }
+        ipcRenderer.send('Show');
         navigator.mediaDevices.getUserMedia(constraints).then((stream) => {
             video.srcObject = stream;  // Play stream in <video> element
             window.localStream = stream;

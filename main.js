@@ -49,14 +49,14 @@ function createTray() {
   // Create the browser window.
   tray = new Tray(join(__dirname, 'appTemplate.png'));
   tray.setToolTip('Mirror | Camera preview')
-  tray.on('click', () => {
+  tray.on('click', async () => {
     if (browserWin.isVisible()) {
-      browserWin.hide();
-      browserWin.webContents.send('asynchronous-message', 'STOP_VIDEO');
+      await browserWin.webContents.send('asynchronous-message', 'STOP_VIDEO');
+      // browserWin.hide();
     }
     else {
-      browserWin.show();
-      browserWin.webContents.send('asynchronous-message', 'SHOW_VIDEO');
+      await browserWin.webContents.send('asynchronous-message', 'SHOW_VIDEO');
+      // browserWin.show();
     }
   })
   tray.on('right-click', () => {
@@ -89,6 +89,12 @@ else {
   store.set('mirrorApp', { autolaunch: true })
 }
 
+ipcMain.on('Show',()=>{
+  browserWin.show()
+})
+ipcMain.on('Hide',()=>{
+  browserWin.hide()
+})
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
